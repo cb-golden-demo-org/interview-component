@@ -4,7 +4,7 @@
 
 # Basic News Application
 
-This repo contains a Vue.js-based clone of [Hacker News](https://hn.ycombinator.com). A live instance of this repo's instance can be viewed [here](TO-DO). You have been tasked with adding CloudBees Smart Tests to the CI build which can be updated in the [workflow.yaml](https://github.com/cb-golden-demo-org/interview-component/blob/main/.cloudbees/workflows/workflow.yaml).
+This repo contains a Vue.js-based clone of [Hacker News](https://github.com/HackerNews). A live instance of this repo's instance can be viewed [here](https://interview-component.interview-component.preview.cb-demos.io/). You have been tasked with adding CloudBees Smart Tests to the CI build which can be found in the [workflow.yaml](https://github.com/cb-golden-demo-org/interview-component/blob/main/.cloudbees/workflows/workflow.yaml).
 
 ## Objective
 
