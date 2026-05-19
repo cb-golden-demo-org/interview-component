@@ -2,7 +2,7 @@
 # PLEASE NOTE:  workflow.yaml in root to copy
 # ###########################################################
 
-# PROJECT_NAME
+# interview-component
 
 This app is a Vue.js-based clone of [Hacker News](https://hn.ycombinator.com).
 
