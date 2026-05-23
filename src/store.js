@@ -35,6 +35,7 @@ export default new Vuex.Store({
       if (matchedUser !== null) {
         localStorage.setItem('user', matchedUser.username)
         localStorage.setItem('loggedIn', 'true')
+        localStorage.setItem('userData', JSON.stringify(matchedUser))
         commit('loginSuccess', matchedUser)
         router.push('/')
         window.location.reload(false)

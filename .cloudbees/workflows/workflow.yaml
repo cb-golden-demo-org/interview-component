@@ -36,15 +36,57 @@ jobs:
           test-result-location: junit.xml
       - name: Get source code
         uses: cloudbees-io/checkout@v1
+        with:
+          fetch-depth: 0
         continue-on-error: true
+
+      - name: Record build with Smart Tests
+        uses: docker://python:3-slim
+        env:
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN }}
+        run: |
+          pip install smart-tests-cli --quiet
+          smart-tests record build \
+            --build ${{ cloudbees.scm.sha }} \
+            --source src=.
+        continue-on-error: true
+
+      - name: Create Smart Tests session
+        uses: docker://python:3-slim
+        env:
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN }}
+        run: |
+          pip install smart-tests-cli --quiet
+          smart-tests record session \
+            --build ${{ cloudbees.scm.sha }} \
+            --test-suite unit-tests \
+            > smart-tests-session.txt
+          echo "Smart Tests session: $(cat smart-tests-session.txt)"
+        continue-on-error: true
+
       - name: Run unit tests
         kind: test
         id: RunUnitTest
         uses: docker://node:lts
         run: |
           npm ci
+          export JEST_JUNIT_SUITE_NAME="{filepath}"
+          export JEST_JUNIT_CLASSNAME="{classname}"
+          export JEST_JUNIT_TITLE="{title}"
           npm run test:unit
           npx jest --coverage >> $CLOUDBEES_OUTPUTS/CODE_COVERAGE
+      - name: Record test results with Smart Tests
+        uses: docker://python:3-slim
+        env:
+          SMART_TESTS_TOKEN: ${{ secrets.SMART_TESTS_TOKEN }}
+        run: |
+          pip install smart-tests-cli --quiet
+          smart-tests record tests \
+            --session $(cat smart-tests-session.txt) \
+            jest \
+            junit.xml
+        continue-on-error: true
+
       - name: Publish test results
         uses: cloudbees-io/publish-test-results@v1
         with:
